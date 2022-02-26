@@ -2,9 +2,16 @@
 
 namespace UAssetAPI.Extension
 {
-    public class NameData : FName, IObjectReference, IImportReference, IExportReference
+    public class NameData : /*FName,*/ IObjectReference, IImportReference, IExportReference
     {
-        public NameData(INameReference name, UAsset asset, int number = 0) : base(name.GetFString(asset), number) { }
+        public INameReference name;
+        public int number;
+
+        public NameData(INameReference name, int number = 0)
+        {
+            this.name = name;
+            this.number = number;
+        }
 
         /// <summary>
         /// Generates an FName that exists in the <paramref name="asset"/> and this <see cref="NameData"/> refers.
@@ -14,15 +21,15 @@ namespace UAssetAPI.Extension
         /// <returns></returns>
         public FName AsAssetFName(UAsset asset)
         {
-            return this;
+            return new FName(name.GetFString(asset), number);
         }
 
         FPackageIndex IObjectReference.GetObjectIndex(UAsset asset)
         {
-            int importIndex = asset.SearchForImport(this);
+            int importIndex = asset.SearchForImport(this.AsAssetFName(asset));
             if (importIndex < 0) return new FPackageIndex(importIndex);
 
-            int exportIndex = asset.SearchForExport(this);
+            int exportIndex = asset.SearchForExport(this.AsAssetFName(asset));
             if (exportIndex > 0) return new FPackageIndex(exportIndex);
 
             throw new InvalidOperationException($"Name Data refers an object called `{this}` which is not present in the asset");
@@ -30,12 +37,12 @@ namespace UAssetAPI.Extension
 
         Import IImportReference.GetImport(UAsset asset)
         {
-            return asset.GetImport(this);
+            return asset.GetImport(this.AsAssetFName(asset));
         }
 
         Export IExportReference.GetExport(UAsset asset)
         {
-            return asset.GetExport(this);
+            return asset.GetExport(this.AsAssetFName(asset));
         }
     }
 }
