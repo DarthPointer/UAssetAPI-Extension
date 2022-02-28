@@ -5,6 +5,25 @@ namespace UAssetAPI.Extension
 {
     public static class UAssetExtension
     {
+        public static void RewriteNameReference(this UAsset asset, INameReference nameToReplace, FString newName)
+        {
+            int indexToReplace = nameToReplace.GetNameIndex(asset);
+            asset.SetNameReference(indexToReplace, newName);
+
+            FString replacedFString = nameToReplace.GetFString(asset);
+
+            List<FName> allNamesThatExist = UAPUtils.FindAllInstances<FName>(asset);
+            for (int i = 0; i < allNamesThatExist.Count; i++)
+            {
+                FName thisOne = allNamesThatExist[i];
+                if (thisOne.Value == replacedFString)
+                {
+                    thisOne.Value = newName;
+                }
+            }
+            return;
+        }
+
         public static int SearchForExport(this UAsset asset, FName objectName)
         {
             int currentPos = 0;
