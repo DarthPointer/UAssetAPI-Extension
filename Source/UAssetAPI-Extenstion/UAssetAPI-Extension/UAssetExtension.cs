@@ -24,6 +24,18 @@ namespace UAssetAPI.Extension
             return;
         }
 
+
+        public static void AddImport(this UAsset asset, NameData package, NameData @class, IObjectReference outer, NameData name)
+        {
+            FName packageFName = package.AsAssetFName(asset);
+            FName classFName = @class.AsAssetFName(asset);
+            FPackageIndex outerPackageIndex = outer.GetObjectIndex(asset);
+            FName nameFName = name.AsAssetFName(asset);
+            
+            asset.AddImport(new Import(packageFName, classFName, outerPackageIndex, nameFName));
+        }
+
+
         public static int SearchForExport(this UAsset asset, FName objectName)
         {
             int currentPos = 0;
@@ -55,6 +67,7 @@ namespace UAssetAPI.Extension
 
             throw new ArgumentException($"The asset does not contain an export called {objectName}");
         }
+
 
         public static void AddPreloadDependency(this UAsset asset, IExportReference targetExport, IObjectReference newDependencyObject, PreloadDependency dependencyType)
         {

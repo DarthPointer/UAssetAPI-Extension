@@ -2,6 +2,8 @@
 
 namespace UAssetAPI.Extension
 {
+    // Not an FName extension since NameData is designed to be initialised out of any UAsset context
+    // and has to store an "unresloved" INameReference instead of FString or name index.
     public class NameData : /*FName,*/ IObjectReference, IImportReference, IExportReference
     {
         public INameReference name;
