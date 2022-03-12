@@ -5,11 +5,14 @@ namespace UAssetAPI.Extension
     public interface IObjectReference
     {
         FPackageIndex GetObjectIndex(UAsset asset);
+
+        //FObjectResource GetFObject(UAsset asset);
     }
 
-    public interface IImportReference
+    public interface IImportReference : IObjectReference
     {
         Import GetImport(UAsset asset);
+
     }
 
     public interface IExportReference
