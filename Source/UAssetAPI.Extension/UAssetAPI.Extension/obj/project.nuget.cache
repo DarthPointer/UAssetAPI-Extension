@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "58mKU5vL/W6wpgAmICrl3N8bwG4vLiJJ78njXoLuv9b4LfUf39raRxwhM2kquAb34hMps36N+nfhGfZxTEYGIw==",
+  "success": true,
+  "projectFilePath": "E:\\Repos\\UAssetAPI-Extension\\Source\\UAssetAPI.Extension\\UAssetAPI.Extension\\UAssetAPI.Extension.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
