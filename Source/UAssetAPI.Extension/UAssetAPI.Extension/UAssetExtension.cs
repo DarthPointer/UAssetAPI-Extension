@@ -68,8 +68,23 @@ namespace UAssetAPI.Extension
             throw new ArgumentException($"The asset does not contain an export called {objectName}");
         }
 
+        public static FObjectResource GetObject(this UAsset asset, FName objectName)
+        {
+            foreach (Import import in asset.Imports)
+            {
+                if (import.ObjectName == objectName) return import;
+            }
 
-        public static void AddPreloadDependency(this UAsset asset, IExportReference targetExport, IObjectReference newDependencyObject, PreloadDependency dependencyType)
+            foreach (Export export in asset.Exports)
+            {
+                if (export.ObjectName == objectName) return export;
+            }
+
+            throw new ArgumentException($"The asset does not contain an object called {objectName}");
+        }
+
+
+        public static void AddPreloadDependency(this UAsset asset, IObjectReference targetExport, IObjectReference newDependencyObject, PreloadDependency dependencyType)
         {
             Export export = targetExport.GetExport(asset);
             FPackageIndex objectIndex = newDependencyObject.GetObjectIndex(asset);
@@ -128,7 +143,7 @@ namespace UAssetAPI.Extension
         /// <param name="dependencyObjectToDelete"></param>
         /// <param name="dependencyType"></param>
         /// <returns>Whether a preload dependency was found and deleted.</returns>
-        public static bool DeletePreloadDependency(this UAsset asset, IExportReference targetExport, IObjectReference dependencyObjectToDelete, PreloadDependency dependencyType)
+        public static bool DeletePreloadDependency(this UAsset asset, IObjectReference targetExport, IObjectReference dependencyObjectToDelete, PreloadDependency dependencyType)
         {
             bool wasDeleted = false;
 

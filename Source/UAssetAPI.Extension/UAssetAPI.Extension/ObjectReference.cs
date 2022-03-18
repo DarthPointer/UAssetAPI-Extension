@@ -6,23 +6,26 @@ namespace UAssetAPI.Extension
     {
         FPackageIndex GetObjectIndex(UAsset asset);
 
-        //FObjectResource GetFObject(UAsset asset);
-    }
+        FObjectResource GetObject(UAsset asset);
 
-    public interface IImportReference : IObjectReference
-    {
         Import GetImport(UAsset asset);
 
-    }
-
-    public interface IExportReference
-    {
         Export GetExport(UAsset asset);
     }
 
+    //public interface IImportReference : IObjectReference
+    //{
+    //    Import GetImport(UAsset asset);
+    //}
+
+    //public interface IExportReference : IObjectReference
+    //{
+    //    Export GetExport(UAsset asset);
+    //}
 
 
-    public class IndexObjectReference : FPackageIndex, IObjectReference, IImportReference, IExportReference
+
+    public class IndexObjectReference : FPackageIndex, IObjectReference
     {
         public IndexObjectReference(int index) : base(index) { }
 
@@ -55,14 +58,28 @@ namespace UAssetAPI.Extension
             }
         }
 
-        Import IImportReference.GetImport(UAsset asset)
+        Import IObjectReference.GetImport(UAsset asset)
         {
             return ToImport(asset);
         }
 
-        Export IExportReference.GetExport(UAsset asset)
+        Export IObjectReference.GetExport(UAsset asset)
         {
             return ToExport(asset);
+        }
+
+        FObjectResource IObjectReference.GetObject(UAsset asset)
+        {
+            if (Index > 0)
+            {
+                return ToExport(asset);
+            }
+            if (Index < 0)
+            {
+                return ToImport(asset);
+            }
+
+            return null;
         }
     }
 }

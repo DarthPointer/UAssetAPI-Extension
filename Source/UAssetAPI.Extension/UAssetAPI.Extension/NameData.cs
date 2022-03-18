@@ -4,7 +4,7 @@ namespace UAssetAPI.Extension
 {
     // Not an FName extension since NameData is designed to be initialised out of any UAsset context
     // and has to store an "unresloved" INameReference instead of FString or name index.
-    public class NameData : /*FName,*/ IObjectReference, IImportReference, IExportReference
+    public class NameData : /*FName,*/ IObjectReference
     {
         public INameReference name;
         public int number;
@@ -37,14 +37,19 @@ namespace UAssetAPI.Extension
             throw new InvalidOperationException($"Name Data refers an object called `{this}` which is not present in the asset");
         }
 
-        Import IImportReference.GetImport(UAsset asset)
+        Import IObjectReference.GetImport(UAsset asset)
         {
             return asset.GetImport(this.AsAssetFName(asset));
         }
 
-        Export IExportReference.GetExport(UAsset asset)
+        Export IObjectReference.GetExport(UAsset asset)
         {
             return asset.GetExport(this.AsAssetFName(asset));
+        }
+
+        FObjectResource IObjectReference.GetObject(UAsset asset)
+        {
+            return asset.GetObject(this.AsAssetFName(asset));
         }
     }
 }
